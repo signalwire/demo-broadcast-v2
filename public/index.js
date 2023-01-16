@@ -24,6 +24,8 @@ roomSession.on("memberList.updated", async (e) => {
 
 roomSession.on("room.audience_count", async (e) => {
   console.log("room.audience_count", e);
+  const span = document.getElementById('audienceCount');
+  span.textContent = e.total
 });
 
 roomSession.on("playback.started", async (member) => {
@@ -78,3 +80,20 @@ async function toggleRec() {
     show(stopRec);
   }
 }
+
+const sse = new EventSource("/sse");
+sse.addEventListener("message", async ({data}) => {
+  var promoteId = data.replaceAll('"', '')
+  console.log('promoting', promoteId);
+  if (confirm('Promote user?')) {
+    await roomSession.promote({
+      memberId: promoteId,
+      permissions: [
+        "room.self.audio_mute",
+        "room.self.audio_unmute",
+        "room.self.video_mute",
+        "room.self.video_unmute"
+      ],
+    });
+  }
+});

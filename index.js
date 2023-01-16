@@ -39,7 +39,7 @@ app.get('/audience', async (req, res) => {
 })
 
 app.post("/notify", async (req, res, next) => {
-  channel.broadcast(req.body.message);
+  channel.broadcast(req.body.member_id);
   res.json({ status: 'ok' });
 })
 
