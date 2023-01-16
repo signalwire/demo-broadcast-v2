@@ -1,4 +1,5 @@
 var _myMemberId = null;
+var _currentRecording = null;
 
 const roomSession = new SignalWire.Video.RoomSession({
   token: _token,
@@ -10,14 +11,19 @@ const roomSession = new SignalWire.Video.RoomSession({
 roomSession.on('room.joined', async (params) => {
   _myMemberId = params.member_id
   await roomSession.hideVideoMuted();
+  toggle('#toolbar')
 })
 
-roomSession.on("member.joined", async (member) => {
-
+roomSession.on("member.joined", async (e) => {
+  console.log("member.joined", e.member.name);
 });
 
-roomSession.on("member.left", async (member) => {
+roomSession.on("memberList.updated", async (e) => {
+  console.log("memberList.updated", e.members);
+});
 
+roomSession.on("room.audience_count", async (e) => {
+  console.log("room.audience_count", e);
 });
 
 roomSession.on("playback.started", async (member) => {
@@ -55,4 +61,20 @@ async function playVideo() {
   }]
 
   await roomSession.play(_.sample(layoutTypes));
+}
+
+async function toggleRec() {
+  if(_currentRecording) {
+    // recording is active
+    console.log('stopping recording')
+    await _currentRecording.stop();
+    _currentRecording = null;
+    hide(stopRec);
+    show(startRec);
+  } else {
+    console.log('starting recording')
+    _currentRecording = await roomSession.startRecording();
+    hide(startRec);
+    show(stopRec);
+  }
 }

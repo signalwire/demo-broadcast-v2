@@ -5,11 +5,14 @@
 </div>
 
 <div class="row">
-  <div class="col">
+  <div class="col" id="toolbar">
     <button type="button" onclick="hangup()" class="btn btn-danger">Hang up</button>
     <button type="button" onclick="playVideo()" class="btn btn-success">Play ad!</button>
     <a href="/audience" target="_blank" class="btn btn-primary">Open audience window</a>
+    <button type="button" id="startRec" onclick="toggleRec()" class="btn btn-info">Start recording</button>
+    <button type="button" id="stopRec" onclick="toggleRec()" class="btn btn-info">Stop recording</button>
   </div>
 </div>
 
+<script type="application/javascript" src="/common.js"></script>
 <script type="application/javascript" src="/index.js"></script>
